@@ -1,0 +1,6 @@
+#!/bin/bash
+USR=$1
+PASS=$2
+DB=$3
+DB_INDEX=$(mysql -u $USR --password=$PASS --batch -N -D $DB -e "SELECT MAX(passID) FROM main_db;")
+echo "LATEST INDEX @ $DB_INDEX"

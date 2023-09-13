@@ -1,0 +1,9 @@
+#!/bin/bash
+USR=$1
+PASS=$2
+SITE_NAME=$3
+DB=$4
+DB_COL=$5
+DB_TABLE=$6
+DB_COL_SPEC=$7
+mysql -u $USR --password=$PASS -D $DB -e "SELECT $DB_COL FROM $DB_TABLE WHERE $DB_COL_SPEC LIKE '%$SITE_NAME%';"

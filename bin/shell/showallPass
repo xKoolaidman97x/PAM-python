@@ -1,0 +1,6 @@
+#!/bin/bash
+USR=$1
+PASS=$2
+DB=$3
+DB_TABLE=$4
+mysql -u $USR --password=$PASS -D $DB -e "SELECT * FROM $DB_TABLE;"

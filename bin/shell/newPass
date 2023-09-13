@@ -1,0 +1,10 @@
+#!/bin/bash
+USR=$1
+PASS=$2
+DB=$3
+DB_COL=$4
+DB_TABLE=$5
+DB_DATA=$6
+echo "INSERT INTO $DB_TABLE ($DB_COL) VALUES ($DB_DATA)"
+mysql -u $USR --password=$PASS --batch -N -D $DB -e "INSERT INTO $DB_TABLE ($DB_COL) VALUES ($DB_DATA)"
+mysql -u $USR --password=$PASS -D $DB -e "SELECT ($DB_COL) FROM $DB_TABLE WHERE url LIKE '%$SITE_NAME%';"

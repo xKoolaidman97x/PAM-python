@@ -1,0 +1,22 @@
+#!/bin/bash
+USR=$1
+PASSWD=$2
+SITE=$3
+DB=$4
+DB_TABLE=$5
+DB_USR=$6
+DB_COL=$7
+DB_COL_SPEC=$8
+#echo "SELECT username FROM $DB_TABLE WHERE url LIKE '%$SITE%' AND username='$DB_USR';"
+OLD_PASS_LOGIN=$(mysql -u $USR --password=$PASSWD --batch -N -D $DB -e "SELECT username FROM $DB_TABLE WHERE $DB_COL_SPEC LIKE '%$SITE%' AND username='$DB_USR';")
+OLD_PASS=$(mysql -u $USR --password=$PASSWD --batch -N -D $DB -e "SELECT password FROM $DB_TABLE WHERE $DB_COL_SPEC LIKE '%$SITE%' AND username='$DB_USR';")
+echo
+echo "Deleting $OLD_PASS_LOGIN with password of $OLD_PASS..."
+echo
+mysql -u $USR --password=$PASSWD -D $DB -e "DELETE FROM $DB_TABLE WHERE $DB_COL_SPEC LIKE '%$SITE%' and username='$DB_USR';"
+echo
+mysql -u $USR --password=$PASSWD -D $DB -e "SELECT $DB_COL FROM $DB_TABLE WHERE $DB_COL_SPEC LIKE '%$SITE%';"
+mysql -u $USR --password=$PASSWD -D $DB -e "OPTIMIZE TABLE $DB_TABLE;"
+mysql -u $USR --password=$PASSWD -D $DB -e "ANALYZE TABLE $DB_TABLE;"
+echo
+echo "Deleted."

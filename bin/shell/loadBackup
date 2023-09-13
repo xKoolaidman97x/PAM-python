@@ -1,0 +1,26 @@
+#!/bin/bash
+USR=$1
+PASSWD=$2
+BIN=$3
+BACKUP_BIN=$BIN/backup
+BACKUP_NAME=$4
+DB=$5
+DB_TABLE=$6
+#$COL=$7
+ROOT=/opt/homebrew/var/mysql/$DB
+echo "Updating backup to csv..."
+cp $BACKUP_BIN/$BACKUP_NAME.csv $ROOT/$BACKUP_NAME.csv
+echo "Updated."
+echo
+echo "Current CSVs:"
+ls -l $BACKUP_BIN/*.csv | awk '{ print $3, $9 }'
+echo
+echo "Loading backup.."
+echo "LOAD DATA INFILE '$BACKUP_NAME.csv' INTO TABLE $DB_TABLE FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;"
+mysql -u $USR --password=$PASSWD -D $DB -e "LOAD DATA INFILE '$BACKUP_NAME.csv' INTO TABLE $DB_TABLE FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;"
+sudo rm -f $ROOT/$BACKUP_NAME.csv
+echo "Backup loaded."
+echo
+echo
+mysql -u $USR --password='$PASSWD' -D $DB -e "SELECT * FROM $DB_TABLE;"
+echo

@@ -1,0 +1,12 @@
+#!/bin/bash
+LOG=$1
+PASSWD=$2
+NEWPASS=$3
+SITENAME=$4
+DB=$5
+DB_TABLE=$6
+USARIO=$7
+PASS=$(mysql -u $LOG --password=$PASSWD --batch -N -D $DB -e "SELECT password FROM $DB_TABLE WHERE url LIKE '$SITENAME' AND username='$USARIO';")
+echo "Updating $PASS to $NEWPASS..."
+mysql -u $LOG --password=$PASSWD --batch -N -D $DB -e "UPDATE $DB_TABLE SET password='$NEWPASS' WHERE url LIKE '$SITENAME' AND username='$USARIO';"
+echo "Updated."

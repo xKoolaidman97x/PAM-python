@@ -1,0 +1,5 @@
+#!/bin/bash
+lpg=$1
+#etimo=/opt/PAM/bin
+bino=/opt/PAM/bin
+sudo mysql -u root -p -e "source $bino/build/build_$lpg.sql"
